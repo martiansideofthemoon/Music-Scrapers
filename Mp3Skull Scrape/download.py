@@ -40,8 +40,9 @@ for maindiv in maindivs:
 	isValid = checkInvalid(songTitle,True,True)
 	if isValid==True:
 		links=maindiv.find_all('a')
-		os.system("wget \""+links[0].get('href')+"\" -P ~/Music/")
-		break
+		wget = os.system("wget \""+links[0].get('href')+"\" -P ~/Music/")
+		if wget==0:
+			break
 
 
 
