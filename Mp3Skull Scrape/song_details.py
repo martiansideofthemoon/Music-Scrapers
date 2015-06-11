@@ -9,7 +9,7 @@ br=mechanize.Browser()
 br.set_handle_robots(False)
 br.addheaders = [('User-agent','Firefox')]
 base_url='http://en.wikipedia.org'
-songDetails = {'search_query':query}
+songDetails = {'Title':"",'Artist':"",'Album':"",'Year':""}
 br.open('https://en.wikipedia.org/wiki/Main_Page')
 br.form=list(br.forms())[0]
 br['search']=query
@@ -27,17 +27,26 @@ for table in required_page.select('table'):
 	if 'class' in table.attrs:
 		if 'vevent' in table.attrs['class']:
 			info_table=table
+			break
+final_data_string=""
 for tr in info_table.select('tr'):
-	if tr.find('td')==None:
-		print tr.text
-		continue
-	if tr.find('th')!=None:
-		to_print=""
-		if tr.find('td').find('ul')!=None:
-			to_print=tr.find('th').text+" : " 
-			for li in tr.find('td').find('ul').select('li'):
-				to_print+=li.text+", "
-			to_print=to_print[:len(to_print)-2]
-		else:
-			to_print=tr.find('th').text+" : "+tr.find('td').text
-		print to_print
+	to_print=""
+	for element in tr.text.splitlines(tr.text.count('\n')):
+		if element == u'\n':
+			continue
+		to_print+=element.strip().strip('"')+","
+	if to_print!="":
+		final_data_string+=to_print[:-1]+"\n"
+final_data_list = final_data_string.splitlines(final_data_string.count('\n'))
+songDetails['Title']=final_data_list[0][:-1]
+songDetails['Artist']=final_data_list[1][final_data_list[1].find('by')+3:-1]
+songDetails['Album']=final_data_list[2][final_data_list[2].find('album')+6:-1]
+dateRE=re.compile(r'Released,.+(\d\d\d\d)')
+for test in final_data_list:
+	result = dateRE.search(test)
+	if result!=None:
+		songDetails['Year']=result.group(1)
+for item in songDetails.items():
+	item[0].strip()
+	item[1].strip()
+	print item[0] + " - " + item[1]
