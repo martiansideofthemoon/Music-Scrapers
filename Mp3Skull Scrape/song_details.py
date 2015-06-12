@@ -16,17 +16,21 @@ br.open('https://en.wikipedia.org/wiki/Main_Page')
 br.form=list(br.forms())[0]
 br['search']=query
 searchResults = br.submit()
-##################################################
-#TODO :- If article exists, ignore article finder.
-##################################################
+#######################################################
+#TODO :- If article duplicates exist, choose best match
+#######################################################
 article_finder = bs4.BeautifulSoup(searchResults.read())
-required_ul=None
-for ul in article_finder.select('ul'):
-	if 'class' in ul.attrs:
-		if ul.attrs['class'][0]=='mw-search-results':
-			required_ul=ul
-request=br.open(base_url+required_ul.find('li').find('a').attrs['href'])
-final_data_list=wikibox.extractWikiBoxes(base_url+required_ul.find('li').find('a').attrs['href'])[0]
+URL=""
+if article_finder.find('h1').text.strip()=='Search results':
+	required_ul=None
+	for ul in article_finder.select('ul'):
+		if 'class' in ul.attrs:
+			if ul.attrs['class'][0]=='mw-search-results':
+				required_ul=ul
+	URL=base_url+required_ul.find('li').find('a').attrs['href']
+else:
+	URL=searchResults.geturl()
+final_data_list=wikibox.extractWikiBoxes(URL)[0]
 ##################################################
 #TODO :- Album Art
 ##################################################
