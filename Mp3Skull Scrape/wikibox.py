@@ -10,7 +10,7 @@ def extractWikiBoxes(wikiurl=""):
 				if 'vevent' in table.attrs['class']:
 					info_tables.append(table)
 		if info_tables==[]:
-			print "No box found."
+			#print "No box found."
 			return
 		else:
 			final_data_strings=[]

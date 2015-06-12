@@ -4,15 +4,20 @@ query=""
 for part in sys.argv[1:]:
 	query=query+part+' '
 query=query[:len(query)-1]
-##################################################
-#TODO :- Add error handling
-##################################################
+if query.strip()=="":
+	print "Please write a query."
+	exit()
+
 br=mechanize.Browser()
 br.set_handle_robots(False)
 br.addheaders = [('User-agent','Firefox')]
 base_url='http://en.wikipedia.org'
 songDetails = {'Title':"",'Artist':"",'Album':"",'Year':""}
-br.open('https://en.wikipedia.org/wiki/Main_Page')
+try:
+	br.open('https://en.wikipedia.org/wiki/Main_Page')
+except:
+	print "Please check your internet connection"
+	exit()
 br.form=list(br.forms())[0]
 br['search']=query
 searchResults = br.submit()
@@ -30,7 +35,14 @@ if article_finder.find('h1').text.strip()=='Search results':
 	URL=base_url+required_ul.find('li').find('a').attrs['href']
 else:
 	URL=searchResults.geturl()
-final_data_list=wikibox.extractWikiBoxes(URL)[0]
+try:
+	final_data_list=wikibox.extractWikiBoxes(URL)[0]
+except:
+	print "No boxes found."
+	exit()
+if final_data_list==None:
+	print "Please give appropriate input."
+	exit()
 ##################################################
 #TODO :- Album Art
 ##################################################
