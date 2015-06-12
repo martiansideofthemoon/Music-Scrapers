@@ -4,6 +4,9 @@ i=0
 for part in sys.argv[1:]:
 	query=query+part+'+'
 query=query[:len(query)-1]
+if query.strip()=="":
+    print "Please write a query."
+    exit()
 br = mechanize.Browser()
 br.set_handle_robots( False )
 br.addheaders = [('User-agent', 'Firefox')]
