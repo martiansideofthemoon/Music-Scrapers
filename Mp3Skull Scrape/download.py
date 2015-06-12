@@ -10,10 +10,10 @@ def checkInvalid(songName=None,checkCover=True,checkRemix=True):
 		isValid=False
 	return isValid
 def getSongDetails(query=""):
-	songDetails = {'search_query':query}
+	
 	return songDetail
+
 query=""
-i=0
 for part in sys.argv[1:]:
 	query=query+part+' '
 query=query[:len(query)-1]
