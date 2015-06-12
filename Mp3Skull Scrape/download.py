@@ -24,6 +24,9 @@ query=query[:len(query)-1]
 if query.strip()=="":
 	print "Please write a query."
 	exit()
+############################################################
+##TODO :- Add getopt module for argument parsing and flags##
+############################################################
 br = mechanize.Browser()
 br.set_handle_robots( False )
 br.addheaders = [('User-agent', 'Firefox')]
@@ -47,8 +50,9 @@ for div in finalpage.select('div'):
 		if not isFound == None:
 			maindivs.append(div)
 if maindivs==[]:
-	print "Please enter valid queries."
+	print "Please enter valid queries / No results found."
 	exit()
+downloadOccured=False
 for maindiv in maindivs:
 	songDetails = {'songTitle':"",'bitrate':0,'songLength':0,'filesize':0.0}
 	songDetails['songTitle'] = maindiv.find('b').getText()
@@ -70,7 +74,10 @@ for maindiv in maindivs:
 		hyperlink = links[0].get('href').encode('ascii','ignore')
 		wget = os.system("wget \""+hyperlink+"\" -P ~/Music/")
 		if wget==0:
+			downloadOccured=True
 			break
+if downloadOccured==False:
+	print "No file matched criteria. Please change some flags."
 
 
 
