@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import mechanize,sys,re,bs4,requests
 query=""
 i=0
