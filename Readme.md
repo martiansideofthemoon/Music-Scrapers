@@ -4,7 +4,6 @@ Supply song and artist names in command line arguments.
 USAGE :- 
 
 <b>Mp3Skull Scrape</b>
-
 ./download.py [FLAGS] SEARCH_QUERY<br>
 -r, --remix		If the song is a remix.<br>
 -c, --cover		If the song is a cover.<br>
