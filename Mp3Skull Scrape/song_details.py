@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import mechanize,re,bs4,sys,requests,wikibox
 
 query=""

@@ -1,4 +1,5 @@
-import mechanize,bs4,os,sys,re
+#!/usr/bin/python
+import mechanize,bs4,os,sys,re,getopt
 
 def checkInvalid(songDetails=None,checkCover=True,checkRemix=True,checkLength=True):
 	songName=songDetails['songTitle']
@@ -17,16 +18,34 @@ def getSongDetails(query=""):
 	
 	return songDetail
 
+
+
+try:
+	opts,args = getopt.getopt(sys.argv[1:],'rcs',['remix','cover','short'])
+except:
+	usage()
+	exit()
+
 query=""
-for part in sys.argv[1:]:
+for part in args:
 	query=query+part+' '
 query=query[:len(query)-1]
 if query.strip()=="":
 	print "Please write a query."
 	exit()
-############################################################
-##TODO :- Add getopt module for argument parsing and flags##
-############################################################
+checkCover=True
+checkRemix=True
+checkLength=True
+for opt,arg in opts:
+	if opt in ['-r','--remix']:
+		checkRemix=False
+		query=query+' remix'
+	elif opt in ['-c','--cover']:
+		checkCover=False
+		query=query+' cover'
+	elif opt in ['-s','short']:
+		checkLength=False
+
 br = mechanize.Browser()
 br.set_handle_robots( False )
 br.addheaders = [('User-agent', 'Firefox')]
@@ -68,7 +87,7 @@ for maindiv in maindivs:
 			except:
 				pass
 			break
-	isValid = checkInvalid(songDetails,True,True)
+	isValid = checkInvalid(songDetails,checkCover,checkRemix,checkLength)
 	if isValid==True:
 		links=maindiv.find_all('a')
 		hyperlink = links[0].get('href').encode('ascii','ignore')
