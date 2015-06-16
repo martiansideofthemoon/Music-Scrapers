@@ -48,10 +48,8 @@ def song_details(query=""):
 		result = dateRE.search(test)
 		if result!=None:
 			songDetails['Year']=result.group(1)
-	for item in songDetails.items():
-		item[0].strip()
-		item[1].strip()
-		print item[0] + " - " + item[1]
+	return songDetails;
+	
 
 query=""
 for part in sys.argv[1:]:
@@ -60,4 +58,8 @@ query=query[:len(query)-1]
 if query.strip()=="":
 	print "Please write a query."
 	exit()
-song_details(query);
+songDetails = song_details(query);
+for item in songDetails.items():
+		item[0].strip()
+		item[1].strip()
+		print item[0] + " - " + item[1]
