@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import mechanize,bs4,os,sys,re,getopt
+import mechanize,bs4,os,sys,re,getopt,eyeD3,song_details
 
 def checkInvalid(songDetails=None,checkCover=True,checkRemix=True,checkLength=True):
 	songName=songDetails['songTitle']
@@ -72,6 +72,7 @@ if maindivs==[]:
 	print "Please enter valid queries / No results found."
 	exit()
 downloadOccured=False
+fileName=""
 for maindiv in maindivs:
 	songDetails = {'songTitle':"",'bitrate':0,'songLength':0,'filesize':0.0}
 	songDetails['songTitle'] = maindiv.find('b').getText()
@@ -94,10 +95,15 @@ for maindiv in maindivs:
 		wget = os.system("wget \""+hyperlink+"\" -P ~/Music/")
 		if wget==0:
 			downloadOccured=True
+			fileRegex = re.compile(r'/(.+)$');
+			fileName=
 			break
 if downloadOccured==False:
 	print "No file matched criteria. Please change some flags."
-
+##################
+#Put song_details#
+##################
+songDetails = song_details.song_details(query);
 
 
 
