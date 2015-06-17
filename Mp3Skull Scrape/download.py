@@ -18,11 +18,11 @@ def checkInvalid(songDetails=None,checkCover=True,checkRemix=True,checkLength=Tr
 
 def putDetails(fileName="",fileLocation="/",songDetails=[]):
 	print songDetails
-	tag = eyeD3.Tag()
-	tag.link(fileLocation+fileName)
-	#tag.setTitle(songDetails['Title'])
+	audioFile = eyeD3.Mp3AudioFile(fileLocation+fileName)
+	tag = audioFile.getTag()
 	tag.setArtist(songDetails['Artist'])
 	tag.setAlbum(songDetails['Album'])
+	tag.setTitle(songDetails['Title'])
 	tag.update()
 	return
 try:
@@ -79,6 +79,7 @@ downloadOccured=False
 fileName=""
 fileLocation=expanduser('~')+'/Music/'
 for maindiv in maindivs:
+	isValid=True
 	songDetails = {'songTitle':"",'bitrate':0,'songLength':0,'filesize':0.0}
 	songDetails['songTitle'] = maindiv.find('b').getText()
 	for div in maindiv.select('div'):
@@ -91,9 +92,10 @@ for maindiv in maindivs:
 				songDetails['songLength']=int(data.group(2))*60+int(data.group(3))
 				songDetails['filesize']=float(data.group(4))+(float(data.group(5))/100)
 			except:
-				pass
+				isValid=False
 			break
-	isValid = checkInvalid(songDetails,checkCover,checkRemix,checkLength)
+	if isValid==True:
+		isValid = checkInvalid(songDetails,checkCover,checkRemix,checkLength)
 	if isValid==True:
 		links=maindiv.find_all('a')
 		hyperlink = links[0].get('href').encode('ascii','ignore')
