@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import mechanize,re,bs4,sys,requests,wikibox
 
-def song_details(query=""):
+def get_song_details(query=""):
 	br=mechanize.Browser()
 	br.set_handle_robots(False)
 	br.addheaders = [('User-agent','Firefox')]
@@ -50,7 +50,7 @@ def song_details(query=""):
 			songDetails['Year']=result.group(1)
 	return songDetails;
 	
-
+"""
 query=""
 for part in sys.argv[1:]:
 	query=query+part+' '
@@ -58,8 +58,9 @@ query=query[:len(query)-1]
 if query.strip()=="":
 	print "Please write a query."
 	exit()
-songDetails = song_details(query);
+songDetails = get_song_details(query);
 for item in songDetails.items():
 		item[0].strip()
 		item[1].strip()
-		print item[0] + " - " + item[1]
+		print item[0] + " : " + item[1]
+"""

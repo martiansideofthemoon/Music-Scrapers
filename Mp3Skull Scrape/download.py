@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import mechanize,bs4,os,sys,re,getopt,eyeD3,song_details
+from os.path import expanduser
 
 def checkInvalid(songDetails=None,checkCover=True,checkRemix=True,checkLength=True):
 	songName=songDetails['songTitle']
@@ -14,18 +15,21 @@ def checkInvalid(songDetails=None,checkCover=True,checkRemix=True,checkLength=Tr
 	if not remixMatch.search(songName)==None and checkRemix==True:
 		isValid=False
 	return isValid
-def getSongDetails(query=""):
-	
-	return songDetail
 
-
-
+def putDetails(fileName="",fileLocation="/",songDetails=[]):
+	print songDetails
+	tag = eyeD3.Tag()
+	tag.link(fileLocation+fileName)
+	#tag.setTitle(songDetails['Title'])
+	tag.setArtist(songDetails['Artist'])
+	tag.setAlbum(songDetails['Album'])
+	tag.update()
+	return
 try:
 	opts,args = getopt.getopt(sys.argv[1:],'rcs',['remix','cover','short'])
 except:
 	usage()
 	exit()
-
 query=""
 for part in args:
 	query=query+part+' '
@@ -73,6 +77,7 @@ if maindivs==[]:
 	exit()
 downloadOccured=False
 fileName=""
+fileLocation=expanduser('~')+'/Music/'
 for maindiv in maindivs:
 	songDetails = {'songTitle':"",'bitrate':0,'songLength':0,'filesize':0.0}
 	songDetails['songTitle'] = maindiv.find('b').getText()
@@ -92,18 +97,18 @@ for maindiv in maindivs:
 	if isValid==True:
 		links=maindiv.find_all('a')
 		hyperlink = links[0].get('href').encode('ascii','ignore')
-		wget = os.system("wget \""+hyperlink+"\" -P ~/Music/")
+		wget = os.system("wget \""+hyperlink+"\" -P "+fileLocation)
 		if wget==0:
 			downloadOccured=True
-			fileRegex = re.compile(r'/(.+)$');
-			fileName=
+			fileRegex = re.compile(r'/([^/]+)$')
+			fileName = fileRegex.search(hyperlink).group(1)
 			break
 if downloadOccured==False:
 	print "No file matched criteria. Please change some flags."
-##################
-#Put song_details#
-##################
-songDetails = song_details.song_details(query);
+	exit()
+songDetails = song_details.get_song_details(query)
+putDetails(fileName,fileLocation,songDetails)
+
 
 
 
