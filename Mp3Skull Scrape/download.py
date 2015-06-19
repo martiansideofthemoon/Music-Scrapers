@@ -16,14 +16,17 @@ def checkInvalid(songDetails=None,checkCover=True,checkRemix=True,checkLength=Tr
 		isValid=False
 	return isValid
 
-def putDetails(fileName="",fileLocation="/",songDetails=[]):
+def putDetails(fileName="",fileLocation="/",songDetails=[],imageName=""):
 	print songDetails
 	audioFile = eyeD3.Mp3AudioFile(fileLocation+fileName)
 	tag = audioFile.getTag()
 	tag.setArtist(songDetails['Artist'])
 	tag.setAlbum(songDetails['Album'])
 	tag.setTitle(songDetails['Title'])
+
+	#tag.addImage(0x08,fileLocation+imageName)
 	tag.update()
+	os.system("eyeD3 --add-image=/"+fileLocation+imageName+":FRONT_COVER "+fileLocation+fileName)
 	return
 try:
 	opts,args = getopt.getopt(sys.argv[1:],'rcs',['remix','cover','short'])
@@ -109,7 +112,12 @@ if downloadOccured==False:
 	print "No file matched criteria. Please change some flags."
 	exit()
 songDetails = song_details.get_song_details(query)
-putDetails(fileName,fileLocation,songDetails)
+wget = os.system("wget \""+songDetails['Artwork']+"\" -P "+fileLocation)
+imageName=""
+if wget==0:
+	fileRegex = re.compile(r'/([^/]+)$')
+	imageName = fileRegex.search(hyperlink).group(1)
+putDetails(fileName,fileLocation,songDetails,imageName)
 
 
 

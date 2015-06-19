@@ -6,7 +6,7 @@ def get_song_details(query=""):
 	br.set_handle_robots(False)
 	br.addheaders = [('User-agent','Firefox')]
 	base_url='http://en.wikipedia.org'
-	songDetails = {'Title':"",'Artist':"",'Album':"",'Year':""}
+	songDetails = {'Title':"",'Artist':"",'Album':"",'Year':"",'Artwork':""}
 	try:
 		br.open('https://en.wikipedia.org/wiki/Main_Page')
 	except:
@@ -37,12 +37,10 @@ def get_song_details(query=""):
 	if final_data_list==None:
 		print "Please give appropriate input."
 		exit()
-	##################################################
-	#TODO :- Album Art
-	##################################################
 	songDetails['Title']=final_data_list[0][:-1]
 	songDetails['Artist']=final_data_list[1][final_data_list[1].find('by')+3:-1]
 	songDetails['Album']=final_data_list[2][final_data_list[2].find('album')+6:-1]
+	songDetails['Artwork']=final_data_list[-1]
 	dateRE=re.compile(r'Released,.+(\d\d\d\d)')
 	for test in final_data_list:
 		result = dateRE.search(test)
