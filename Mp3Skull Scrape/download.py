@@ -26,7 +26,7 @@ def putDetails(fileName="",fileLocation="/",songDetails=[],imageName=""):
 
 	#tag.addImage(0x08,fileLocation+imageName)
 	tag.update()
-	os.system("eyeD3 --add-image=/"+fileLocation+imageName+":FRONT_COVER "+fileLocation+fileName)
+	os.system("eyeD3 -Y "+songDetails['Year']+" --add-image=/"+fileLocation+imageName+":FRONT_COVER "+fileLocation+fileName)
 	return
 try:
 	opts,args = getopt.getopt(sys.argv[1:],'rcs',['remix','cover','short'])
