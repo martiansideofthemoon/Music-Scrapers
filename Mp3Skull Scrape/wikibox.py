@@ -1,7 +1,7 @@
 import bs4,requests,re
 
 def extractWikiBoxes(wikiurl=""):
-	#try:
+	try:
 		res = requests.get(wikiurl)
 		wikipage = bs4.BeautifulSoup(res.text)
 		info_tables=[]
@@ -31,11 +31,10 @@ def extractWikiBoxes(wikiurl=""):
 					if http_format.search(img_url)==None:
 						img_url='http:'+img_url
 				data_string+=img_url
-				print data_string
 				final_data_strings.append(data_string)
 				final_data_list.append(data_string.splitlines(data_string.count('\n')))
 			return final_data_list
-	#except:
-	#	print "Something went wrong. Please check your internet connection."
-	#	return
+	except:
+		print "Something went wrong. Please check your internet connection."
+		return
 #print extractWikiBoxes('https://en.wikipedia.org/wiki/Burn_It_Down_(Linkin_Park_song)')
