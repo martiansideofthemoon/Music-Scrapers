@@ -26,7 +26,8 @@ def putDetails(fileName="",fileLocation="/",songDetails=[],imageName=""):
 
 	#tag.addImage(0x08,fileLocation+imageName)
 	tag.update()
-	os.system("eyeD3 -Y "+songDetails['Year']+" --add-image=/"+fileLocation+imageName+":FRONT_COVER "+fileLocation+fileName)
+	os.system("eyeD3 -Y "+songDetails['Year']+" --add-image=/"+fileLocation+"\""+imageName+"\":FRONT_COVER "+fileLocation+"\""+fileName+"\"")
+	os.system("rm \""+fileLocation+imageName+"\"")
 	return
 try:
 	opts,args = getopt.getopt(sys.argv[1:],'rcs',['remix','cover','short'])
@@ -117,6 +118,7 @@ imageName=""
 if wget==0:
 	fileRegex = re.compile(r'/([^/]+)$')
 	imageName = fileRegex.search(hyperlink).group(1)
+print fileName
 putDetails(fileName,fileLocation,songDetails,imageName)
 
 
