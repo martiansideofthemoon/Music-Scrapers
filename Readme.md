@@ -8,6 +8,7 @@ USAGE :-
 -r, --remix		If the song is a remix.<br>
 -c, --cover		If the song is a cover.<br>
 -s, --short		If the song length is under 90 seconds.<br>
+download.py also uses song_details.py to put the required metadata.
 
 ./song_details.py [FLAGS] SEARCH_QUERY<br>
 
