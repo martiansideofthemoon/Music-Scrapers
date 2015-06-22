@@ -1,18 +1,13 @@
 #!/usr/bin/python
 import mechanize,sys,re,bs4,requests
-query=""
-i=0
-for part in sys.argv[1:]:
-	query=query+part+'+'
-query=query[:len(query)-1]
-if query.strip()=="":
-    print "Please write a query."
-    exit()
-br = mechanize.Browser()
-br.set_handle_robots( False )
-br.addheaders = [('User-agent', 'Firefox')]
-try:
-    br.open('http://search.azlyrics.com/search.php?q='+query);
+def getlyrics(query=""):
+    br = mechanize.Browser()
+    br.set_handle_robots( False )
+    br.addheaders = [('User-agent', 'Firefox')]
+    try:
+        br.open('http://search.azlyrics.com/search.php?q='+query);
+    except:
+        return "Please check your internet connection."
     links=[]
     for l in br.links():
         for i in l.attrs:
@@ -27,8 +22,17 @@ try:
         finalpage = bs4.BeautifulSoup(res.text)
         for div in finalpage.select('div'):
         	if div.attrs=={}:
-        		print div.text
+        		return div.text
     except:
-        print "Lyrics not found. Please check your input."
-except:
-    print "Please check your internet connection."
+        return "Lyrics not found. Please check your input."
+    
+
+query=""
+i=0
+for part in sys.argv[1:]:
+    query=query+part+'+'
+query=query[:len(query)-1]
+if query.strip()=="":
+    print "Please write a query."
+    exit()
+print getlyrics(query)
