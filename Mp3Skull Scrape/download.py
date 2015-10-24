@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import mechanize,bs4,os,sys,re,getopt,eyeD3,song_details
+import mechanize,bs4,os,sys,re,getopt,eyed3,song_details
 from os.path import expanduser
 
 def checkInvalid(songDetails=None,checkCover=True,checkRemix=True,checkLength=True):
@@ -18,7 +18,7 @@ def checkInvalid(songDetails=None,checkCover=True,checkRemix=True,checkLength=Tr
 
 def putDetails(fileName="",fileLocation="/",songDetails=[],imageName=""):
 	print songDetails
-	audioFile = eyeD3.Mp3AudioFile(fileLocation+fileName)
+	audioFile = eyed3.Mp3AudioFile(fileLocation+fileName)
 	tag = audioFile.getTag()
 	tag.setArtist(songDetails['Artist'])
 	tag.setAlbum(songDetails['Album'])
@@ -26,7 +26,7 @@ def putDetails(fileName="",fileLocation="/",songDetails=[],imageName=""):
 
 	#tag.addImage(0x08,fileLocation+imageName)
 	tag.update()
-	os.system("eyeD3 -Y "+songDetails['Year']+" --add-image=/"+fileLocation+"\""+imageName+"\":FRONT_COVER "+fileLocation+"\""+fileName+"\"")
+	os.system("eyed3 -Y "+songDetails['Year']+" --add-image=/"+fileLocation+"\""+imageName+"\":FRONT_COVER "+fileLocation+"\""+fileName+"\"")
 	#os.system("rm \""+fileLocation+imageName+"\"")
 	return
 try:
@@ -57,11 +57,11 @@ for opt,arg in opts:
 br = mechanize.Browser()
 br.set_handle_robots( False )
 br.addheaders = [('User-agent', 'Firefox')]
-try:
-	br.open('http://mp3skull.cr')
-except:
-	print "Please check your internet connection. Or else, try again later."
-	exit()
+#try:
+br.open('http://mp3skull.is')
+#except:
+#	print "Please check your internet connection. Or else, try again later."
+#	exit()
 for form in br.forms():
 	if form.attrs['id']=='f1':
 		br.form = form
